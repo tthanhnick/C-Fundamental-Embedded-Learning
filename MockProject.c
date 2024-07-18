@@ -340,7 +340,7 @@ void LoadEmployeesTime(struct EmployeeTime employeesTime[], unsigned short* numE
 void ViewWorkingTime(const struct EmployeeTime employeesTime[], unsigned short numEmployeesTime) 
 {
     unsigned short days=0;
-    unsigned short employeeId;
+    unsigned short employeeId=0;
 
     printf("Enter Employee ID: ");
     scanf("%hd", &employeeId);
@@ -468,8 +468,8 @@ void NormalModeMenu()
 // Function to record check-in or check-out time
 void recordTime(struct Employee employees[], unsigned short numEmployees, unsigned short mode) 
 {
-    unsigned short employeeId;
-    char confirmation;
+    unsigned short employeeId=0;
+    char confirmation=0;
 
     printf("Enter your Employee ID: ");
     scanf("%hd", &employeeId);

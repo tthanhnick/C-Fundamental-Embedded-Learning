@@ -373,7 +373,7 @@ void ViewWorkingTime(const struct EmployeeTime employeesTime[], unsigned short n
 // Function to calculate salaries
 void CalculateSalaries(const struct EmployeeTime employeesTime[], unsigned short numEmployeesTime, struct Employee employees[], unsigned short numEmployees) 
 {
-    float actualWorkingTime = 0.00;
+    float actualWorkingTime = 0;
     unsigned int salary = 0;
 
     // Match the employee Id between Admin Mode and Normal Mode

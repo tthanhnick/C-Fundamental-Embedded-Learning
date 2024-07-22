@@ -27,9 +27,9 @@ struct EmployeeTime
 };
 
 // Function Declaration
-void DecodePassword();
 void MainMenu();
 void AdminModeMenu();
+void DecodePassword();
 void ChangeAdminPassword();
 void LoadEmployees(struct Employee employees[], unsigned short* numEmployees);
 void AddEmployee(struct Employee employees[], unsigned short* numEmployees); 
@@ -66,7 +66,6 @@ void MainMenu() // Function to display the menu and get user's choice
         {
             case 1: //Admin Mode
                 DecodePassword();
-                //AdminModeMenu();
                 break;
             case 2: //Normal Mode
                 NormalModeMenu();

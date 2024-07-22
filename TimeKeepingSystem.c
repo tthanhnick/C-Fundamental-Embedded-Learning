@@ -281,9 +281,8 @@ void LoadEmployees(struct Employee employees[], unsigned short* numEmployees)
             (*numEmployees) ++; // Update numEmployees
             fscanf(fp,"%hd %d %24[^\n]s\n", &emp.id, &emp.basicSalary, emp.fullName); // update input data to structure
         }
-
-
     }
+    
     fclose(fp);    
 }
 
@@ -391,6 +390,7 @@ void LoadEmployeesTime(struct EmployeeTime employeesTime[], unsigned short* numE
             fscanf(fp, "%hd %f %hd %24[^\n]s\n", &empT.id, &empT.timeRecord, &empT.timeStatus, empT.fullName); // update input data to structure
         }
     }
+
     fclose(fp); 
 }
 

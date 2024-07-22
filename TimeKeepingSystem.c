@@ -40,7 +40,6 @@ void CalculateSalaries(const struct EmployeeTime employeesTime[], unsigned short
 void NormalModeMenu();
 void RecordTime(struct Employee employees[], unsigned short numEmployees, unsigned short mode); 
 
-
 int main()
 {
     MainMenu();
@@ -99,7 +98,7 @@ void AdminModeMenu()
         printf("\nAdmin Mode Menu:\n");
         printf("1. Change Admin Password\n");
         printf("2. Add Employee\n");
-        printf("3. View Employee Information\n");
+        printf("3. View All Employees Information\n");
         printf("4. View Working Time for a Specific Employee\n");
         printf("5. Calculate Salaries\n");
         printf("6. Exit Admin Mode\n");
@@ -116,7 +115,6 @@ void AdminModeMenu()
                 break;
             case 2: // Add Employee
                 AddEmployee(employees, &numEmployees);
-                //SaveEmployees(employees, numEmployees);
                 break;
             case 3: //View All Employee Information
                 ViewEmployeeInfo(employees, numEmployees);
@@ -282,7 +280,7 @@ void LoadEmployees(struct Employee employees[], unsigned short* numEmployees)
             fscanf(fp,"%hd %d %24[^\n]s\n", &emp.id, &emp.basicSalary, emp.fullName); // update input data to structure
         }
     }
-    
+
     fclose(fp);    
 }
 
@@ -425,7 +423,7 @@ void ViewWorkingTime(const struct EmployeeTime employeesTime[], unsigned short n
 
     if (g_status == false) // If employee Id not found
     {
-       printf("Employee with ID %d not found.\n", employeeId);
+       printf("Employee with ID %d not checking yet.\n", employeeId);
     }
     g_status = false; 
 }
@@ -513,12 +511,12 @@ void NormalModeMenu()
             case 2: // Check-out
                 RecordTime(employees, numEmployees, 1);
                 break;
-            case 3:
+            case 3: // Exit Normal Mode menu
                 printf("Exiting Normal mode.\n");
                 exit(0);
-            case 4:
+            case 4: // Return to main menu
                 MainMenu();
-            default:
+            default: // default
                 printf("Invalid option. Please try again.\n");
                 NormalModeMenu();
         }

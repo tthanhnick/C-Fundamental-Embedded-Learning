@@ -401,7 +401,7 @@ void CalculateSalaries(const struct EmployeeTime employeesTime[], unsigned short
                         salary = salary - 20000;
                     }
                 }
-                else if (employeesTime[j].timeStatus == 0) //check out
+                else if (employeesTime[j].timeStatus == 1) //check out
                 {
                     if (employeesTime[j].timeStatus < 16.5) // Check out sooner than 17:00
                     {

@@ -27,6 +27,7 @@ struct EmployeeTime
 };
 
 // Function Declaration
+void DecodePassword();
 void MainMenu();
 void AdminModeMenu();
 void ChangeAdminPassword();
@@ -64,7 +65,8 @@ void MainMenu() // Function to display the menu and get user's choice
         switch (option)
         {
             case 1: //Admin Mode
-                AdminModeMenu();
+                DecodePassword();
+                //AdminModeMenu();
                 break;
             case 2: //Normal Mode
                 NormalModeMenu();
@@ -141,6 +143,46 @@ void AdminModeMenu()
     }
 }
 
+void DecodePassword()
+{
+    FILE *fp = fopen("AdminPassword.txt", "r");
+    char userInput[9]="";
+    char fileInput[9]="";
+    char temp = 0; // temp character
+
+    if (fp == NULL) // check if the password file open succeeded
+    {
+        printf("File creation failed");
+        return; 
+    }
+
+    fscanf(fp, "%s", fileInput);
+    
+    // Prompt for a new password
+    printf("Enter your password (8 characters numbers without space): ");
+    gets(userInput);
+
+    // Decrypt the password (add character with 24)
+    for (int i = 0; i < (int) (strlen(userInput)); i++) 
+    {
+        userInput[i] += 24; // add 24 to the character
+    }
+
+    // Decrypt the password (reverse characters)
+    for (int i = 0; i < (int) (strlen(userInput))/2; i++) // divide the string by half between left and right
+    {
+        temp = userInput[i]; // temp character = left character
+        userInput[i] = userInput[strlen(userInput)-i -1]; // left character = right character
+        userInput[strlen(userInput)-i -1] = temp; // right character = temp character
+    }
+
+    if (strcmp(fileInput,userInput)==0)
+    {
+        AdminModeMenu();
+    }
+    
+}
+
 void ChangeAdminPassword() 
 {
     char temp = 0; // temp character
@@ -148,6 +190,7 @@ void ChangeAdminPassword()
     // Prompt for a new password
     printf("Enter your new password (8 characters numbers without space): ");
     gets(g_adminPassword);
+    printf("\nPasword changes successfully\n");
 
     // Encrypt the password (reverse characters)
     for (int i = 0; i < (int) (strlen(g_adminPassword))/2; i++) // divide the string by half between left and right
@@ -374,7 +417,7 @@ void CalculateSalaries(const struct EmployeeTime employeesTime[], unsigned short
     float actualWorkingTime = 0;
     unsigned int salary = 0;
 
-    // Match the employee Id between Admin Mode and Normal Mode
+    //Match the employee Id between Admin Mode and Normal Mode
     for (int i = 0; i < numEmployees; i++)
     {
         for (int j = 0; j < numEmployeesTime; j++)

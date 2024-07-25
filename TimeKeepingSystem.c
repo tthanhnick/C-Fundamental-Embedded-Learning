@@ -8,7 +8,7 @@
 #define MAX_EMPLOYEES_TIME 1000
 
 char g_adminPassword[9] = "12345678"; // admin password
-bool g_status = false;
+bool g_status = false; // employee checking status
 
 struct Employee // Struct to hold employee salary information
 {
@@ -17,12 +17,11 @@ struct Employee // Struct to hold employee salary information
     unsigned int basicSalary; 
 };
 
-// Define a struct to hold employee working time information
-struct EmployeeTime 
+struct EmployeeTime // Struct to hold employee working time information
 {
     unsigned short id;
     char fullName[25];
-    float timeRecord; // the working time recorded
+    float timeRecord; // the working time recorded from empoyee
     unsigned short timeStatus; // the working time status (in/out) 
 };
 
@@ -33,10 +32,10 @@ void DecodePassword();
 void ChangeAdminPassword();
 void LoadEmployees(struct Employee employees[], unsigned short* numEmployees);
 void AddEmployee(struct Employee employees[], unsigned short* numEmployees); 
-void ViewEmployeeInfo(const struct Employee employees[], unsigned short numEmployees);
+void ViewEmployeeInfo(struct Employee employees[], unsigned short numEmployees);
 void LoadEmployeesTime(struct EmployeeTime employeesTime[], unsigned short* numEmployeesTime); 
-void ViewWorkingTime(const struct EmployeeTime employeesTime[], unsigned short numEmployeesTime); 
-void CalculateSalaries(const struct EmployeeTime employeesTime[], unsigned short numEmployeesTime, struct Employee employees[], unsigned short numEmployees); 
+void ViewWorkingTime(struct EmployeeTime employeesTime[], unsigned short numEmployeesTime); 
+void CalculateSalaries(struct EmployeeTime employeesTime[], unsigned short numEmployeesTime, struct Employee employees[], unsigned short numEmployees); 
 void NormalModeMenu();
 void RecordTime(struct Employee employees[], unsigned short numEmployees, unsigned short mode); 
 
@@ -81,8 +80,9 @@ void MainMenu() // Function to display the menu and get user's choice
     }
 }
 
-void AdminModeMenu()
+void AdminModeMenu() // Function to display admin mode menu
 {
+    // Create an array of struct Employee
     struct Employee employees[MAX_EMPLOYEES];
     struct EmployeeTime employeesTime[MAX_EMPLOYEES_TIME];
 
@@ -90,6 +90,7 @@ void AdminModeMenu()
     unsigned short numEmployeesTime = 0;
     unsigned short option = 0;
 
+    // Load employee data from a file and save as a structure
     LoadEmployees(employees, &numEmployees);
     LoadEmployeesTime(employeesTime, &numEmployeesTime);
 
@@ -140,11 +141,11 @@ void AdminModeMenu()
     }
 }
 
-void DecodePassword()
+void DecodePassword() // Function for checking password from Admin input
 {
     char userInput[9]=""; //string from user input
     char fileInput[9]=""; //string from file
-    char temp = 0; // temp character
+    char temp = 0; // temporary character
 
     // Read data from file
     FILE *fp = fopen("AdminPassword.txt", "r");
@@ -158,7 +159,7 @@ void DecodePassword()
     fscanf(fp, "%s", fileInput);
     
     // Input for password
-    printf("Enter your password (8 characters numbers without space): ");
+    printf("Enter your password (8 number-characters without space): ");
     gets(userInput);
 
     // Decrypt the password (add character with 24)
@@ -168,10 +169,10 @@ void DecodePassword()
     }
 
     // Decrypt the password (reverse characters)
-    for (int i = 0; i < (int) (strlen(userInput))/2; i++) // divide the string by half between left and right
+    for (int i = 0; i < (int) (strlen(userInput))/2; i++) // loop through half string
     {
         temp = userInput[i]; // temp character = left character
-        userInput[i] = userInput[strlen(userInput)-i -1]; // left character = right character
+        userInput[i] = userInput[strlen(userInput)-i -1]; // left most character = right most character
         userInput[strlen(userInput)-i -1] = temp; // right character = temp character
     }
 
@@ -195,9 +196,9 @@ void DecodePassword()
     */
 }
 
-void ChangeAdminPassword() 
+void ChangeAdminPassword() // Function to change the admin password
 {
-    char temp = 0; // temp character
+    char temp = 0; // temporary character
 
     // Prompt for a new password
     printf("Enter your new password (8 characters numbers without space): ");
@@ -205,10 +206,10 @@ void ChangeAdminPassword()
     printf("\nPasword changes successfully\n");
 
     // Encrypt the password (reverse characters)
-    for (int i = 0; i < (int) (strlen(g_adminPassword))/2; i++) // divide the string by half between left and right
+    for (int i = 0; i < (int) (strlen(g_adminPassword))/2; i++) // loop through half string
     {
         temp = g_adminPassword[i]; // temp character = left character
-        g_adminPassword[i] = g_adminPassword[strlen(g_adminPassword)-i -1]; // left character = right character
+        g_adminPassword[i] = g_adminPassword[strlen(g_adminPassword)-i -1]; // left most character = right most character
         g_adminPassword[strlen(g_adminPassword)-i -1] = temp; // right character = temp character
     }
 
@@ -227,12 +228,13 @@ void ChangeAdminPassword()
         return; 
     }
 
+    // save the password to a file
     fprintf(fp, "%s", g_adminPassword);
     fclose(fp); 
 }
 
-// Function to load employee data from a file (you'll need to implement this)
-void LoadEmployees(struct Employee employees[], unsigned short* numEmployees)
+// Function to load employee data from a file 
+void LoadEmployees(struct Employee employees[], unsigned short* numEmployees) 
 {
     char lineString[50]=""; // string in a line
     char stringCounters[50]=""; // string used for counter
@@ -263,7 +265,7 @@ void LoadEmployees(struct Employee employees[], unsigned short* numEmployees)
     }
 
     // Read the data of first line and update to structure
-    fscanf(fp, "%hd %d %24[^\n]s\n", &emp.id, &emp.basicSalary, emp.fullName); // update input data to structure
+    fscanf(fp, "%hd %d %24[^\n]s\n", &emp.id, &emp.basicSalary, emp.fullName); 
    
    // Read the data of until end of line
     while (1)
@@ -277,7 +279,7 @@ void LoadEmployees(struct Employee employees[], unsigned short* numEmployees)
         {
             employees[*numEmployees] = emp; // Populate the employees array
             (*numEmployees) ++; // Update numEmployees
-            fscanf(fp,"%hd %d %24[^\n]s\n", &emp.id, &emp.basicSalary, emp.fullName); // update input data to structure
+            fscanf(fp,"%hd %d %24[^\n]s\n", &emp.id, &emp.basicSalary, emp.fullName); 
         }
     }
 
@@ -331,7 +333,7 @@ void AddEmployee(struct Employee employees[], unsigned short* numEmployees)
 }
 
 // Function to view employee information
-void ViewEmployeeInfo(const struct Employee employees[], unsigned short numEmployees) 
+void ViewEmployeeInfo(struct Employee employees[], unsigned short numEmployees) 
 {
     // Display Employee ID, full name, and basic salary for all employees
     for (int i = 0; i < numEmployees; i++) 
@@ -394,7 +396,7 @@ void LoadEmployeesTime(struct EmployeeTime employeesTime[], unsigned short* numE
 
 
 // Function to retrieve check-in and check-out times for an employee
-void ViewWorkingTime(const struct EmployeeTime employeesTime[], unsigned short numEmployeesTime) 
+void ViewWorkingTime(struct EmployeeTime employeesTime[], unsigned short numEmployeesTime) 
 {
     unsigned short days=0; // working days of the employee
     unsigned short employeeId=0; // id of the employee
@@ -414,14 +416,17 @@ void ViewWorkingTime(const struct EmployeeTime employeesTime[], unsigned short n
                 printf("Day: %hd\n",++days);
             }
 
+            // Get the minutes part from the checking time
+            float timeMinutes = ((float) employeesTime[i].timeRecord - (unsigned short) employeesTime[i].timeRecord) * 60;
+            
             // Display the employee information with checking status (in/out)
             printf("ID: %hd, Full Name: %s, ", employeesTime[i].id,employeesTime[i].fullName);
-            printf("Time: %.2f, Time Status: %s\n", employeesTime[i].timeRecord, employeesTime[i].timeStatus == 0 ? "check-in" : "check-out");
+            printf("Time: %hd hours %.0f minutes, Time Status: %s\n", (unsigned short) employeesTime[i].timeRecord, timeMinutes, employeesTime[i].timeStatus == 0 ? "check-in" : "check-out");
             g_status = true;
         }
     }
 
-    if (g_status == false) // If employee Id not found
+    if (g_status == false) // If employee Id checking found
     {
        printf("Employee with ID %d not checking yet.\n", employeeId);
     }
@@ -429,7 +434,7 @@ void ViewWorkingTime(const struct EmployeeTime employeesTime[], unsigned short n
 }
 
 // Function to calculate salaries
-void CalculateSalaries(const struct EmployeeTime employeesTime[], unsigned short numEmployeesTime, struct Employee employees[], unsigned short numEmployees) 
+void CalculateSalaries(struct EmployeeTime employeesTime[], unsigned short numEmployeesTime, struct Employee employees[], unsigned short numEmployees) 
 {
     float actualWorkingTime = 0;
     unsigned int salary = 0;
@@ -468,16 +473,16 @@ void CalculateSalaries(const struct EmployeeTime employeesTime[], unsigned short
                         salary = salary - 20000;
                     }
                 }
-                
             }
         }
+        
         printf("ID: %hd, Full name: %s, Salary: %d VND\n", employees[i].id, employees[i].fullName, salary);
         actualWorkingTime = 0; //reset actualWorkingTime for next iteration
         salary = 0; //reset salary for next iteration
     }
 }
 
-void NormalModeMenu() 
+void NormalModeMenu() // Normal mode display menu
 {
     // Create an array of struct Employee
     struct Employee employees[MAX_EMPLOYEES];
@@ -530,7 +535,7 @@ void RecordTime(struct Employee employees[], unsigned short numEmployees, unsign
     char confirmation=0;
 
     printf("Enter your Employee ID: ");
-    scanf("%hd", &employeeId);
+    scanf("%hd", &employeeId); // Get the employee ID from user input
     getc(stdin);
 
     // Search for the specified employeeId
